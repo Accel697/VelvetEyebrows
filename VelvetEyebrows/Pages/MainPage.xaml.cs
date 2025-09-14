@@ -129,17 +129,23 @@ namespace VelvetEyebrows.Pages
 
         private void btnAddService_Click(object sender, RoutedEventArgs e)
         {
-
+            NavigationService.Navigate(new AddEditService(null));
         }
 
         private void LViewServices_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            if (adminMode == true)
+            {
+                NavigationService.Navigate(new AddEditService(LViewServices.SelectedItem as Service));
+            }
         }
 
         private void btnEditService_Click(object sender, RoutedEventArgs e)
         {
-
+            if (adminMode == true)
+            {
+                NavigationService.Navigate(new AddEditService(LViewServices.SelectedItem as Service));
+            }
         }
 
         private void btnDeleteService_Click(object sender, RoutedEventArgs e)

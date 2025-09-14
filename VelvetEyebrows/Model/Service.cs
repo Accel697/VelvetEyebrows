@@ -98,8 +98,15 @@ namespace VelvetEyebrows.Model
         {
             get
             {
-                var path = $"pack://application:,,,/Resources/{this.MainImagePath}";
-                return path;
+                if (this.MainImagePath != null)
+                {
+                    var path = $"pack://application:,,,/Resources/{this.MainImagePath.Trim()}";
+                    return path;
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
     }
