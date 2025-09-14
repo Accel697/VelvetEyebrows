@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VelvetEyebrows.Pages;
 
 namespace VelvetEyebrows
 {
@@ -23,6 +24,24 @@ namespace VelvetEyebrows
         public MainWindow()
         {
             InitializeComponent();
+            FrmMain.Navigate(new MainPage());
+        }
+
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            FrmMain.GoBack();
+        }
+
+        private void FrmMain_ContentRendered(object sender, EventArgs e)
+        {
+            if (FrmMain.CanGoBack)
+            {
+                btnBack.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btnBack.Visibility = Visibility.Hidden;
+            }
         }
     }
 }
