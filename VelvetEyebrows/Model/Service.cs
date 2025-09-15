@@ -109,5 +109,13 @@ namespace VelvetEyebrows.Model
                 }
             }
         }
+
+        public string ServiceData
+        {
+            get
+            {
+                return $"{this.Title}, {this.DurationInMinutes} минут";
+            }
+        }
     }
 }

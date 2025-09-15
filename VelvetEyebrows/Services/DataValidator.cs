@@ -27,5 +27,21 @@ namespace VelvetEyebrows.Services
 
             return (errors.Count == 0, errors);
         }
+
+        public (bool isValid, List<string> errors) RequestValidator(ClientService request)
+        {
+            List<string> errors = new List<string>();
+
+            if (request.ClientID == 0)
+                errors.Add("Выберите клиента");
+
+            if (request.ServiceID == 0)
+                errors.Add("Выберите услугу");
+
+            if (request.StartTime == null)
+                errors.Add("Укажите дату и время");
+
+            return (errors.Count == 0, errors);
+        }
     }
 }

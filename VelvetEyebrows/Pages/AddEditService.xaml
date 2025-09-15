@@ -25,20 +25,26 @@
             <TextBlock Text="Длительность (в секундах):"/>
             <TextBox Name="tbDuration" Text="{Binding DurationInSeconds}"/>
 
-            <TextBlock Text="Скидка:"/>
+            <TextBlock Text="Скидка (%):"/>
             <TextBox Name="tbDiscount" Text="{Binding Discount}"/>
 
             <StackPanel Orientation="Horizontal">
-                <Border BorderBrush="Black" BorderThickness="1">
+                <Border BorderBrush="Gray" BorderThickness="0.5">
                     <Image x:Name="img" Width="100" Height="100" Source="{Binding ImgPath}"/>
                 </Border>
-                <Button x:Name="btnEnterImage" Content="Выбрать фото" Click="btnEnterImage_Click"/>
+                <StackPanel Orientation="Vertical">
+                    <Button x:Name="btnEnterImage" Content="Выбрать фото" Click="btnEnterImage_Click"/>
+                    <Button x:Name="btnClearImage" Content="Убрать фото" Click="btnClearImage_Click"/>
+                </StackPanel>
             </StackPanel>
 
             <TextBlock Text="Описание:"/>
             <TextBox Name="tbDescription" Text="{Binding Description}"/>
 
-            <Button x:Name="btnSave" Content="Сохранить" Click="btnSave_Click"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button x:Name="btnSave" Content="Сохранить" Margin="10" Click="btnSave_Click"/>
+                <Button x:Name="btnDelete" Content="Удалить" Margin="10" Visibility="Collapsed" Click="btnDelete_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

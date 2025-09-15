@@ -33,5 +33,46 @@ namespace VelvetEyebrows.Model
         public virtual ICollection<DocumentByService> DocumentByService { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ProductSale> ProductSale { get; set; }
+
+        public TimeSpan RemainTime
+        {
+            get
+            {
+                TimeSpan lastTime = this.StartTime - System.DateTime.Now;
+                return lastTime;
+            }
+        }
+
+        public string RemainTimeString
+        {
+            get
+            {
+                if (this.RemainTime.TotalHours > 1)
+                {
+                    return $"{Math.Truncate(this.RemainTime.TotalHours)} часов {this.RemainTime.Minutes} минут";
+                }
+                else
+                {
+                    return $"{this.RemainTime.Minutes} минут";
+                }
+            }
+        }
+
+        public string TimeColor
+        {
+            get
+            {
+                if (this.RemainTime.TotalHours < 1)
+                {
+                    return "Red";
+                }
+                else
+                {
+                    return "Black";
+                }
+            }
+        }
+
+        public DateTime DateStart { get; set; }
     }
 }

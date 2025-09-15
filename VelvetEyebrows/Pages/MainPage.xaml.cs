@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using VelvetEyebrows.Model;
+using VelvetEyebrows.Windows;
 
 namespace VelvetEyebrows.Pages
 {
@@ -23,14 +24,14 @@ namespace VelvetEyebrows.Pages
     {
         private bool adminMode = false;
 
-        private string[] SortingList { get; set; } =
+        public string[] SortingList { get; set; } =
         {
             "Без сортировки",
             "Стоимость по возрастанию",
             "Стоимость по убыванию"
         };
 
-        private string[] FilterList { get; set; } =
+        public string[] FilterList { get; set; } =
         {
             "Все диапазоны",
             "0% - 5%",
@@ -83,7 +84,7 @@ namespace VelvetEyebrows.Pages
             {
                 result = result.Where(s => s.Discount >= 30 && s.Discount < 70).ToList();
             }
-            if (cbFilter.SelectedIndex == 1)
+            if (cbFilter.SelectedIndex == 5)
             {
                 result = result.Where(s => s.Discount >= 70 && s.Discount < 100).ToList();
             }
@@ -124,7 +125,8 @@ namespace VelvetEyebrows.Pages
 
         private void btnToRequests_Click(object sender, RoutedEventArgs e)
         {
-
+            RequestWindow requestWindow = new RequestWindow();
+            requestWindow.Show();
         }
 
         private void btnAddService_Click(object sender, RoutedEventArgs e)
@@ -144,13 +146,63 @@ namespace VelvetEyebrows.Pages
         {
             if (adminMode == true)
             {
-                NavigationService.Navigate(new AddEditService(LViewServices.SelectedItem as Service));
+                Button button = sender as Button;
+
+                var item = button.DataContext;
+
+                if (item is Service service)
+                {
+                    NavigationService.Navigate(new AddEditService(service));
+                }
             }
         }
 
         private void btnDeleteService_Click(object sender, RoutedEventArgs e)
         {
+            if (adminMode == true)
+            {
+                Button button = sender as Button;
 
+                var item = button.DataContext;
+
+                if (item is Service service)
+                {
+                    var context = beauty_salonEntities.GetContext();
+
+                    if (MessageBox.Show($"Вы действительно хотите удалить: {service.Title}?", "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                    {
+                        try
+                        {
+                            context.Service.Remove(service);
+                            context.SaveChanges();
+                            MessageBox.Show("Запись удалена!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
+                            Reload();
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (Visibility == Visibility.Visible)
+            {
+                Reload();
+            }
+        }
+
+        private void Reload()
+        {
+            beauty_salonEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+            var services = beauty_salonEntities.GetContext().Service.ToList();
+            LViewServices.ItemsSource = null;
+            LViewServices.ItemsSource = services;
+            txtAllAmount.Text = services.Count.ToString();
+            UpdateData();
         }
     }
 }
